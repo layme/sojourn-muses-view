@@ -20,10 +20,10 @@ Vue.use(elementUI)
 Vue.prototype.$message = elementUI.Message
 
 // 根据环境变量决定是否引入mock
-if (process.env.VUE_APP_USE_MOCK || (process.env.NODE_ENV !== 'production' && !process.env.VUE_APP_BACK_END_URL)) {
-  const Mock = require('./mock/index').default
-  Mock.mockData()
-}
+// if (process.env.VUE_APP_USE_MOCK || (process.env.NODE_ENV !== 'production' && !process.env.VUE_APP_BACK_END_URL)) {
+//   const Mock = require('./mock/index').default
+//   Mock.mockData()
+// }
 
 /* vue-i18n */
 Vue.use(VueI18n)

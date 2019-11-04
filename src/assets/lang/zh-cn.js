@@ -39,7 +39,16 @@ export default {
     settings: '个人设置',
     modifyPass: '修改密码',
     permissions: '用户权限',
-    about: '关于项目'
+    about: '关于项目',
+    cache: '缓存管理',
+    redis: 'Redis管理',
+    config: '配置管理',
+    zookeeper: 'Zookeeper配置',
+    job: '定时任务',
+    business: '业务线',
+    trigger: '触发器',
+    recoup: '补偿任务',
+    elastic: 'Elastic任务'
   },
   header: {
     languageSelect: '选择语言',

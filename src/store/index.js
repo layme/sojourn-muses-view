@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { requestUserInfo } from '@/api/user'
+import { requestUserInfo } from '../api/user'
+import { getMenuByRouter } from '../utils/util'
+import routers from '../router/routers'
 
 Vue.use(Vuex)
 
@@ -15,6 +17,9 @@ export default new Vuex.Store({
       token: null,
       cancel: null
     }
+  },
+  getters: {
+    menuList: (state, getters, rootState) => getMenuByRouter(routers, state.user.permissions)
   },
   mutations: {
     setUser (state, { user }) {
@@ -32,8 +37,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    requestUserInfo ({ commit }) {
-      return requestUserInfo().then(user => {
+    requestUserInfo (state, { commit }) {
+      return requestUserInfo(state.source.token).then(user => {
         commit('setUser', { user })
       })
     }

@@ -4,16 +4,18 @@ import main from '../views/layout/TheLayout'
  * meta {
  *   title: 标题
  *   hideMenu: 隐藏菜单
+ *   access: 权限
  * }
  */
 export default [
   {
     path: '/',
-    name: 'index',
+    name: '',
     redirect: '/index',
     meta: {
       title: '大盘',
-      icon: 'el-icon-odometer'
+      icon: 'el-icon-odometer',
+      hideMenu: true
     },
     component: main,
     children: [
@@ -30,31 +32,101 @@ export default [
     ]
   },
   {
-    path: '/vehicle',
-    name: 'vehicle',
+    path: '/cache',
+    name: 'cache',
     meta: {
-      title: '车辆',
+      title: 'menu.cache',
       icon: 'el-icon-truck'
     },
     component: main,
     children: [
       {
-        path: 'sold',
-        name: 'sold',
+        path: 'redis',
+        name: 'redis',
         meta: {
-          title: '已售车辆',
+          title: 'menu.redis',
           icon: 'el-icon-truck'
-        }
-      },
-      {
-        path: 'stock',
-        name: 'stock',
-        meta: {
-          title: '库存车辆',
-          icon: 'el-icon-truck'
-        }
+        },
+        component: () => import('../views/cache/index')
       }
     ]
+  },
+  {
+    path: '/config',
+    name: 'config',
+    meta: {
+      title: 'menu.config',
+      icon: 'el-icon-truck'
+    },
+    component: main,
+    children: [
+      {
+        path: 'zookeeper',
+        name: 'zookeeper',
+        meta: {
+          title: 'menu.zookeeper',
+          icon: 'el-icon-truck'
+        },
+        component: () => import('../views/config/index')
+      }
+    ]
+  },
+  {
+    path: '/job',
+    name: 'job',
+    meta: {
+      title: 'menu.job',
+      icon: 'el-icon-truck'
+    },
+    component: main,
+    children: [
+      {
+        path: 'business',
+        name: 'business',
+        meta: {
+          title: 'menu.business',
+          icon: 'el-icon-truck'
+        },
+        component: () => import('../views/job/business/index')
+      },
+      {
+        path: 'trigger',
+        name: 'trigger',
+        meta: {
+          title: 'menu.trigger',
+          icon: 'el-icon-truck'
+        },
+        component: () => import('../views/job/trigger/index')
+      }
+    ]
+  },
+  {
+    path: '/recoup',
+    name: 'recoup',
+    meta: {
+      title: 'menu.recoup',
+      icon: 'el-icon-truck'
+    },
+    component: main,
+    children: [
+      {
+        path: 'elastic',
+        name: 'elastic',
+        meta: {
+          title: 'menu.elastic',
+          icon: 'el-icon-truck'
+        },
+        component: () => import('../views/recoup/index')
+      }
+    ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    meta: {
+      hideInMenu: true
+    },
+    component: () => import('../views/login/AppLogin')
   },
   {
     path: '*',

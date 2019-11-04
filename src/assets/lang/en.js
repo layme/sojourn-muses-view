@@ -39,7 +39,16 @@ export default {
     settings: 'Settings',
     modifyPass: 'Change Password',
     permissions: 'Permissions',
-    about: 'About'
+    about: 'About',
+    cache: 'Cache Manage',
+    redis: 'Redis Manage',
+    config: 'Config Manage',
+    zookeeper: 'Zookeeper Config',
+    job: 'Timer Job',
+    business: 'Business Line',
+    trigger: 'Trigger',
+    recoup: 'Recoup Job',
+    elastic: 'Elastic Job'
   },
   header: {
     languageSelect: 'Language',

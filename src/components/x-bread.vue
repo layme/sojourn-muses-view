@@ -13,7 +13,7 @@ export default {
       let list = []
       console.log('=> ', this.$route.matched)
       this.$route.matched.forEach(item => {
-        list.push(item.title)
+        list.push(item.meta.title)
       })
       return list
     }

@@ -9,11 +9,11 @@ export const requestLogin = params => {
 }
 
 export const requestRegister = params => {
-  return request('/api/user/register', params)
+  return request('post', '/api/user/register', params)
 }
 
 export const requestUserInfo = params => {
-  return request('/api/user/info', params).then(res => {
+  return request('get', '/api/user/info', params).then(res => {
     // 过滤菜单
     const filterUserMenu = function (menus, accessMenu) {
       menus.forEach(function (m) {
@@ -45,17 +45,17 @@ export const requestUserInfo = params => {
 }
 
 export const requestLogout = params => {
-  return request('/api/user/logout', params)
+  return request('post', '/api/user/logout', params)
 }
 
 export const requestChangePassword = params => {
-  return request('/api/user/changePassword', params)
+  return request('post', '/api/user/changePassword', params)
 }
 
 export const requestUserQuery = params => {
-  return request('/api/user/query', params)
+  return request('post', '/api/user/query', params)
 }
 
 export const requestPermissionsQuery = params => {
-  return request('/api/user/permissions', params)
+  return request('post', '/api/user/permissions', params)
 }

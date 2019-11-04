@@ -38,7 +38,7 @@ import { MessageBox, Message } from 'element-ui'
  **/
 
 const axiosCustom = axios.create({
-  baseURL: process.env.BASE_URL,
+  baseURL: 'http://localhost:8224',
   withCredentials: true
 })
 
@@ -48,12 +48,12 @@ axiosCustom.interceptors.request.use(function (config) {
 })
 
 /* 普通请求 */
-export const request = (url, params = {}, config = {}, autoErrorRes = true, autoErrorData = true, autoCancel = true) => {
+export const request = (method, url, params, config = {}, autoErrorRes = true, autoErrorData = true, autoCancel = true) => {
   if (autoCancel) {
     config = Object.assign({ cancelToken: store.state.source.token }, config)
   }
   const args = Object.assign({
-    'method': 'post',
+    'method': method,
     'url': url,
     'data': params
   }, config)

@@ -4,7 +4,7 @@
       <the-header :open-nav="openNav" @toggle-open="toggleOpen"></the-header>
     </el-col>
     <el-col :span="24" class="page-main">
-      <the-sidebar :open-nav="openNav"></the-sidebar>
+      <the-sidebar :collapse="openNav" :menu-list="menuList"></the-sidebar>
       <section class="page-content" :class="{'page-content-hide-aside': !openNav}">
         <the-main></the-main>
         <the-footer></the-footer>
@@ -36,6 +36,11 @@ export default {
     'the-sidebar': TheLayoutSidebar,
     'the-footer': TheLayoutFooter,
     'the-main': TheLayoutMain
+  },
+  computed: {
+    menuList () {
+      return this.$store.getters.menuList
+    }
   }
 }
 </script>

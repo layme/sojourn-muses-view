@@ -2,8 +2,8 @@
   <el-header class="header">
     <router-link to="/index">
       <div class="logo" :class="{'logo-hide': !openNav}">
-<!--        <img src="../../assets/logo.png" class="image"/>-->
-        <i class="el-icon-alarm-clock" style="font-size: 30px; color: #ffffff;"></i>
+        <img src="../../assets/img/about/my-logo.png" class="image"/>
+<!--        <i class="el-icon-alarm-clock" style="font-size: 30px; color: #ffffff;"></i>-->
         <span class="text">缪斯管控</span>
       </div>
     </router-link>
@@ -11,7 +11,7 @@
       <i class="el-icon-s-fold toggle" @click="navOpenToggle" :title="$t('header.toggleNavHide')" v-show="openNav"></i>
       <i class="el-icon-s-unfold toggle" @click="navOpenToggle" :title="$t('header.toggleNavShow')"
          v-show="!openNav"></i>
-      <x-bread></x-bread>
+      <x-bread style="margin-left: 20px"></x-bread>
     </div>
     <div class="right max-right">
       <div class="right-item">
@@ -139,7 +139,7 @@ export default {
     text-align: center;
     font-size: 25px;
     cursor: pointer;
-    background-color: #0E2134;
+    background-color: #304156;
 
     .image {
       width: 40px;
@@ -150,6 +150,7 @@ export default {
     .text {
       color: #ffffff;
       margin-left: 10px;
+      vertical-align: middle;
     }
   }
 
