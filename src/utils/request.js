@@ -1,5 +1,5 @@
 import axios from 'axios'
-import qs from 'qs'
+// import qs from 'qs'
 import store from '../store/index'
 import { MessageBox, Message } from 'element-ui'
 
@@ -38,8 +38,9 @@ import { MessageBox, Message } from 'element-ui'
  **/
 
 const axiosCustom = axios.create({
-  baseURL: 'http://localhost:8224',
-  withCredentials: true
+  baseURL: 'http://localhost:8224/',
+  withCredentials: true,
+  timeout: 10000
 })
 
 axiosCustom.interceptors.request.use(function (config) {
@@ -53,17 +54,17 @@ export const request = (method, url, params, config = {}, autoErrorRes = true, a
     config = Object.assign({ cancelToken: store.state.source.token }, config)
   }
   const args = Object.assign({
-    'method': method,
-    'url': url,
-    'data': params
+    method: method,
+    url: url,
+    data: params
   }, config)
   // 处理url传参
-  if (!['put', 'post', 'patch'].includes(args.method.toLowerCase())) {
-    args['params'] = args['params'] || args['data']
-    args['paramsSerializer'] = args['paramsSerializer'] || function (params) {
-      return qs.stringify(params, { arrayFormat: 'indices' })
-    }
-  }
+  // if (!['put', 'post', 'patch'].includes(args.method.toLowerCase())) {
+  //   args['params'] = args['params'] || args['data']
+  //   args['paramsSerializer'] = args['paramsSerializer'] || function (params) {
+  //     return qs.stringify(params, { arrayFormat: 'indices' })
+  //   }
+  // }
   return axiosCustom(args).then((res) => {
     // 未登录
     if (res.data.type === 'login') {

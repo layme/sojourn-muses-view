@@ -44,6 +44,9 @@ router.beforeEach((to, from, next) => {
   if (whiteList.indexOf(to.fullPath) >= 0) {
     return next()
   }
+  if (!localStorage.getItem('user-token')) {
+    return next({ path: '/login' })
+  }
   let permissions = router.app.$options.store.state.user.permissions
   /* 上次会话结束，重新获取用户信息 */
   if (!permissions.length) {

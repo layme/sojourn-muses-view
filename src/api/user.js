@@ -2,7 +2,7 @@ import { request } from '../utils/request'
 import staticRouter from '@/router/staticRouter'
 
 export const requestLogin = params => {
-  return request('/api/user/login', params).then(data => {
+  return request('post', '/api/user/login', params).then(data => {
     localStorage.setItem('user-token', JSON.stringify(data.token))
     return data
   })
