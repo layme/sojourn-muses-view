@@ -37,8 +37,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    requestUserInfo (state, { commit }) {
-      return requestUserInfo(state.source.token).then(user => {
+    requestUserInfo ({ commit }) {
+      return requestUserInfo().then(user => {
         commit('setUser', { user })
       })
     }

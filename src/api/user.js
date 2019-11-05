@@ -3,7 +3,7 @@ import staticRouter from '@/router/staticRouter'
 
 export const requestLogin = params => {
   return request('post', '/api/user/login', params).then(data => {
-    localStorage.setItem('user-token', JSON.stringify(data.token))
+    localStorage.setItem('user-token', data.token)
     return data
   })
 }
@@ -13,7 +13,7 @@ export const requestRegister = params => {
 }
 
 export const requestUserInfo = params => {
-  return request('get', '/api/user/info', params).then(res => {
+  return request('post', '/api/user/info', params).then(res => {
     // 过滤菜单
     const filterUserMenu = function (menus, accessMenu) {
       menus.forEach(function (m) {

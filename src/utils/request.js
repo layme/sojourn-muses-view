@@ -59,12 +59,12 @@ export const request = (method, url, params, config = {}, autoErrorRes = true, a
     data: params
   }, config)
   // 处理url传参
-  // if (!['put', 'post', 'patch'].includes(args.method.toLowerCase())) {
-  //   args['params'] = args['params'] || args['data']
-  //   args['paramsSerializer'] = args['paramsSerializer'] || function (params) {
-  //     return qs.stringify(params, { arrayFormat: 'indices' })
-  //   }
-  // }
+  if (!['put', 'post', 'patch'].includes(args.method.toLowerCase())) {
+    args['params'] = args['params'] || args['data']
+    // args['paramsSerializer'] = args['paramsSerializer'] || function (params) {
+    //   return qs.stringify(params, { arrayFormat: 'indices' })
+    // }
+  }
   return axiosCustom(args).then((res) => {
     // 未登录
     if (res.data.type === 'login') {
@@ -72,21 +72,35 @@ export const request = (method, url, params, config = {}, autoErrorRes = true, a
       window.location.href = res.data.url || '/#/login'
     }
     // 自动处理返回格式错误
-    if (autoErrorData && res.data.hasOwnProperty('code') && res.data.code !== 1) {
-      console.error(res.data)
-      const errMsg = res.data.errorMessage || '未知的服务器错误，请联系管理员！'
-      const errCod = res.data.code
-      MessageBox.alert(errMsg, '请求异常：' + errCod, { confirmButtonText: '确定' })
+    if (autoErrorData && res.data.hasOwnProperty('code') && res.data.code !== 200) {
+      const errMsg = res.data.message || '未知的服务器错误，请联系管理员！'
+      switch (res.data.code) {
+        case 400:
+          Message({ message: `${errMsg}`, type: 'warning' })
+          break
+        case 500:
+          Message({ message: `${errMsg}`, type: 'warning' })
+          // MessageBox.alert(errMsg, `服务错误: ${errCod}`, { confirmButtonText: '确定' })
+          break
+        default:
+          Message({ message: `${errMsg}`, type: 'error' })
+          // MessageBox.alert(errMsg, `其他错误: ${errCod}`, { confirmButtonText: '确定' })
+          break
+      }
       return Promise.reject(res.data)
     }
-    return res.data
+    return res.data.body
   }, (error) => {
     // 自动处理网络请求错误
     console.error(error)
     error.response = error.response || {}
     const errStatus = error.response.status || -100
     if (autoErrorRes && error.message) {
-      MessageBox.alert('网络请求异常，请联系管理员！', '请求异常：' + errStatus, { confirmButtonText: '确定' })
+      if (errStatus === 404) {
+        MessageBox.alert('请求资源不存在，请联系管理员！', '请求异常：' + errStatus, { confirmButtonText: '确定' })
+      } else {
+        MessageBox.alert('网络请求异常，请联系管理员！', '请求异常：' + errStatus, { confirmButtonText: '确定' })
+      }
     }
     return Promise.reject(error)
   })

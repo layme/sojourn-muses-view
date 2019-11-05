@@ -624,9 +624,8 @@ export default {
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           this.logining = true
-          const loginParams = { username: this.ruleForm.account, password: sha256(this.ruleForm.checkPass) }
+          const loginParams = { username: this.ruleForm.account, password: this.ruleForm.checkPass }
           requestLogin(loginParams).then(data => {
-            console.log('login ', loginParams)
             this.logining = false
             this.$message({
               message: this.$t('login.loginSuccess'),
@@ -638,7 +637,6 @@ export default {
             console.log(err)
           })
         } else {
-          console.log('error submit!!')
           return false
         }
       })

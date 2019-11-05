@@ -17,11 +17,11 @@ export default {
   color: #666666;
   min-height: 100%;
   overflow: visible;
-  min-width: fit-content;
+  /*min-width: fit-content;*/
 }
 
 .main-body {
-  background-color: #ffffff;
+  /*background-color: #ffffff;*/
   padding: 20px;
   min-height: 100%;
   margin-bottom: 40px;

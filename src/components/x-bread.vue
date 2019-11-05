@@ -11,7 +11,6 @@ export default {
   computed: {
     breadList () {
       let list = []
-      console.log('=> ', this.$route.matched)
       this.$route.matched.forEach(item => {
         list.push(item.meta.title)
       })

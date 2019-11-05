@@ -1,38 +1,65 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="8">
-        <el-input placeholder="请输入内容" v-model="key" class="input-with-select" @keyup.enter="getRedis">
-          <el-button slot="append" icon="el-icon-search" @click="getRedis"></el-button>
-        </el-input>
-      </el-col>
-    </el-row>
-    <el-row style="margin-top: 20px">
-      <el-col :span="8">
-        <el-input
-          type="textarea"
-          :rows="5"
-          v-model="result"
-        ></el-input>
-      </el-col>
-    </el-row>
-  </div>
+  <el-card>
+    <el-form ref="paramForm" label-position="top" label-width="80px" :model="paramDto" v-loading="loading">
+      <el-row>
+        <el-col :span="8">
+          <el-form-item prop="key" :rules="[{ required: true, message: '请输入缓存的key', trigger: 'blur' }]">
+            <el-input placeholder="请输入缓存的key" v-model="paramDto.key" :maxlength="30" clearable
+                      @keyup.enter.native="validForm">
+              <el-button slot="append" icon="el-icon-search" @click="validForm"></el-button>
+            </el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <el-form-item label="缓存内容">
+            <el-input
+              type="textarea"
+              readonly
+              style="margin-top: 5px"
+              :autosize="{ minRows: 10 }"
+              v-model="paramDto.result"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+  </el-card>
 </template>
 
 <script>
 import { getRedis } from '../../api/cache'
+
 export default {
   name: 'cache',
   data () {
     return {
-      key: '',
-      result: ''
+      paramDto: {
+        key: '',
+        result: ''
+      },
+      loading: false
     }
   },
   methods: {
+    validForm () {
+      this.paramDto.result = ''
+      this.$refs['paramForm'].validate((valid) => {
+        if (valid) {
+          this.getRedis()
+        } else {
+          return false
+        }
+      })
+    },
     getRedis () {
-      getRedis(this.key).then(res => {
-        this.result = res
+      this.loading = true
+      getRedis(this.paramDto.key).then(res => {
+        this.paramDto.result = res
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
       })
     }
   }
