@@ -19,7 +19,7 @@ const staticRouter = [
     children: [
       {
         path: '/index',
-        name: 'index',
+        name: 'index.vue',
         title: 'menu.home',
         icon: 'el-icon-s-home',
         component: () => import('@/views/pages/PageHome')

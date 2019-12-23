@@ -4,8 +4,7 @@
       <el-form :inline="true" :model="paramDto">
         <el-form-item>
           <el-select v-model="paramDto.departmentFid" placeholder="中心名称">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+            <el-option label="旅居中心" value="15f4ds46f54ds65f4546fdsafsdfdsf"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -17,11 +16,14 @@
       </el-form>
     </el-card>
     <el-card style="margin-top: 20px">
+      <div>
+        <el-button type="primary" plain @click="addCounter++">添加</el-button>
+      </div>
       <el-table
         :data="tableData"
         stripe
         v-loading="loading"
-        style="width: 100%">
+        style="margin-top: 20px">
         <el-table-column
           prop="depName"
           label="中心名称"
@@ -62,17 +64,17 @@
         </el-table-column>
         <el-table-column
           label="操作"
-          width="100"
+          width="120"
           fixed="right">
           <template slot-scope="scope">
             <el-button
-              @click.native.prevent="editRow(scope.$index, tableData)"
+              @click.native.prevent="openServer(scope.row)"
               type="text"
               size="small">
-              编辑
+              查看机器
             </el-button>
             <el-button
-              @click.native.prevent="deleteRow(scope.$index, tableData)"
+              @click.native.prevent="deleteRow(scope.row)"
               type="text"
               style="color: #F56C6C"
               size="small">
@@ -91,14 +93,18 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <add-form :counter="addCounter" @success="search"></add-form>
+    <server :param="row" :counter="serverCounter"></server>
   </div>
 </template>
 
 <script>
-import { listBusiness } from '../../../api/business'
-
+import { listBusiness, del } from '../../../api/business'
+import addForm from './addForm'
+import server from './server'
 export default {
   name: 'business',
+  components: { addForm, server },
   data () {
     return {
       paramDto: {
@@ -109,15 +115,18 @@ export default {
       },
       loading: false,
       tableData: [],
-      total: 0
+      total: 0,
+      addCounter: 0,
+      serverCounter: 0,
+      row: {}
     }
   },
   methods: {
     search () {
       this.paramDto.page = 1
-      this.listSysConfig()
+      this.listBusiness()
     },
-    listSysConfig () {
+    listBusiness () {
       this.loading = true
       listBusiness(this.paramDto).then(res => {
         this.tableData = res.rows
@@ -128,11 +137,23 @@ export default {
       })
     },
     handleCurrentChange () {
-      this.listSysConfig()
+      this.listBusiness()
     },
-    editRow () {
+    openServer (val) {
+      this.serverCounter++
+      this.row = val
     },
-    deleteRow () {
+    deleteRow (val) {
+      this.$confirm('确定移除该条业务线?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        del(val).then(() => {
+          this.$message.success('移除成功')
+          this.search()
+        })
+      })
     }
   },
   created () {

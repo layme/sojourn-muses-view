@@ -6,8 +6,7 @@
           <el-col span="8">
             <el-form-item label="中心名称">
               <el-select v-model="paramDto.serverInfoFid" placeholder="请选择中心名称" class="x-select-width">
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-option label="旅居中心" value="15f4ds46f54ds65f4546fdsafsdfdsf"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -48,7 +47,7 @@
       </el-form>
     </el-card>
     <el-card style="margin-top: 20px">
-      <div style="text-align: right;">
+      <div>
         <el-button type="primary" plain @click="search">添加</el-button>
       </div>
       <el-table
@@ -89,9 +88,12 @@
           min-width="120">
         </el-table-column>
         <el-table-column
-          prop="state"
           label="状态"
           width="100">
+          <template slot-scope="scope">
+            <el-tag type="success" size="small" v-if="'NORMAL' === scope.row.state">{{ scope.row.state }}</el-tag>
+            <el-tag type="warning" size="small" v-if="'PAUSE' === scope.row.state">{{ scope.row.state }}</el-tag>
+          </template>
         </el-table-column>
         <el-table-column
           label="类型"
@@ -136,8 +138,8 @@
               运行一次
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item icon="el-icon-edit">编辑</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-video-play">启用</el-dropdown-item>
-                <el-dropdown-item icon="el-icon-video-pause">暂停</el-dropdown-item>
+                <el-dropdown-item v-if="'PAUSE' === scope.row.state" icon="el-icon-video-play">启用</el-dropdown-item>
+                <el-dropdown-item v-if="'NORMAL' === scope.row.state" icon="el-icon-video-pause">暂停</el-dropdown-item>
                 <el-dropdown-item divided icon="el-icon-delete" style="color: #F56C6C;">移除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -165,7 +167,7 @@ export default {
   data () {
     return {
       paramDto: {
-        serverInfoFid: '8a90a5f3628401ef01628401eff30000',
+        serverInfoFid: '15f4ds46f54ds65f4546fdsafsdfdsf',
         businessFid: '0a37f6a2-423a-484f-9f80-5d600624aa41',
         ipAddress: '',
         triggerGroupRe: '',

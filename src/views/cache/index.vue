@@ -1,62 +1,61 @@
 <template>
   <el-card>
-    <el-form ref="paramForm" label-position="top" label-width="80px" :model="paramDto" v-loading="loading">
-      <el-row>
+      <el-row :gutter="20">
         <el-col :span="8">
-          <el-form-item prop="key" :rules="[{ required: true, message: '请输入缓存的key', trigger: 'blur' }]">
-            <el-input placeholder="请输入缓存的key" v-model="paramDto.key" :maxlength="30" clearable
-                      @keyup.enter.native="validForm">
-              <el-button slot="append" icon="el-icon-search" @click="validForm"></el-button>
+            <el-input placeholder="请输入缓存的key" v-model="key" :maxlength="30" clearable
+                      @keyup.enter.native="getRedis">
             </el-input>
-          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+              <el-button type="primary" icon="el-icon-search" :disabled="!key" @click="getRedis">查询</el-button>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
-          <el-form-item label="缓存内容">
+          <div style="margin-top: 28px">缓存内容</div>
             <el-input
               type="textarea"
               readonly
               style="margin-top: 5px"
               :autosize="{ minRows: 10 }"
-              v-model="paramDto.result"
+              v-model="result"
             ></el-input>
-          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+            <el-button type="warning" icon="el-icon-delete" v-show="result" @click="delRedis" style="margin-top: 55px">删除缓存</el-button>
         </el-col>
       </el-row>
-    </el-form>
   </el-card>
 </template>
 
 <script>
-import { getRedis } from '../../api/cache'
+import { getRedis, delRedis } from '../../api/cache'
 
 export default {
   name: 'cache',
   data () {
     return {
-      paramDto: {
-        key: '',
-        result: ''
-      },
+      key: '',
+      result: '',
       loading: false
     }
   },
   methods: {
-    validForm () {
-      this.paramDto.result = ''
-      this.$refs['paramForm'].validate((valid) => {
-        if (valid) {
-          this.getRedis()
-        } else {
-          return false
-        }
+    getRedis () {
+      this.result = ''
+      this.loading = true
+      getRedis(this.key).then(res => {
+        this.result = res
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
       })
     },
-    getRedis () {
+    delRedis () {
       this.loading = true
-      getRedis(this.paramDto.key).then(res => {
-        this.paramDto.result = res
+      delRedis(this.key).then(() => {
+        this.$message.success('删除成功')
+        this.result = ''
         this.loading = false
       }).catch(() => {
         this.loading = false

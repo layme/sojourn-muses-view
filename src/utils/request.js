@@ -59,7 +59,7 @@ export const request = (method, url, params, config = {}, autoErrorRes = true, a
     data: params
   }, config)
   // 处理url传参
-  if (!['put', 'post', 'patch'].includes(args.method.toLowerCase())) {
+  if (!['put', 'post', 'patch'].includes(args.method.toLowerCase()) || config.contentType === 'application/x-www-form-urlencoded') {
     args['params'] = args['params'] || args['data']
     // args['paramsSerializer'] = args['paramsSerializer'] || function (params) {
     //   return qs.stringify(params, { arrayFormat: 'indices' })

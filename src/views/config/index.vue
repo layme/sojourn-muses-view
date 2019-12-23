@@ -14,11 +14,16 @@
       </el-form>
     </el-card>
     <el-card style="margin-top: 20px">
+      <div>
+        <el-button type="primary" plain @click="openAdd">添加</el-button>
+        <el-button type="warning" plain :loading="reBuildLoading" @click="reBuild">重建全部系统配置数据</el-button>
+      </div>
       <el-table
         :data="tableData"
         stripe
         v-loading="loading"
-        style="width: 100%">
+        :row-class-name="tableRowClassName"
+        style="margin-top: 20px">
         <el-table-column
           prop="type"
           label="类型"
@@ -61,13 +66,13 @@
           fixed="right">
           <template slot-scope="scope">
             <el-button
-              @click.native.prevent="editRow(scope.$index, tableData)"
+              @click.native.prevent="openEdit(scope.row)"
               type="text"
               size="small">
               编辑
             </el-button>
             <el-button
-              @click.native.prevent="deleteRow(scope.$index, tableData)"
+              @click.native.prevent="deleteRow(scope.row)"
               type="text"
               style="color: #F56C6C"
               size="small">
@@ -86,14 +91,16 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <input-form :title="title" :counter="counter" :param="row" @success="search"></input-form>
   </div>
 </template>
 
 <script>
-import { listSysConfig } from '../../api/config'
-
+import { listSysConfig, del, reBuild } from '../../api/config'
+import inputForm from './inputForm'
 export default {
   name: 'config',
+  components: { inputForm },
   data () {
     return {
       paramDto: {
@@ -103,8 +110,12 @@ export default {
         limit: 10
       },
       loading: false,
+      reBuildLoading: false,
       tableData: [],
-      total: 0
+      total: 0,
+      title: '',
+      counter: 0,
+      row: {}
     }
   },
   methods: {
@@ -125,9 +136,48 @@ export default {
     handleCurrentChange () {
       this.listSysConfig()
     },
-    editRow () {
+    tableRowClassName ({ row, rowIndex }) {
+      if (row.value !== row.zkValue) {
+        return 'warning-row'
+      }
+      return ''
     },
-    deleteRow () {
+    openAdd () {
+      this.row = {}
+      this.title = '添加系统配置'
+      this.counter++
+    },
+    openEdit (row) {
+      this.row = row
+      this.title = '修改系统配置'
+      this.counter++
+    },
+    deleteRow (val) {
+      this.$confirm('确定移除该项配置?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        del(val).then(() => {
+          this.$message.success('移除成功')
+          this.search()
+        })
+      })
+    },
+    reBuild () {
+      this.$confirm('确定重建全部系统配置数据?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.reBuildLoading = true
+        reBuild().then(() => {
+          this.$message.success('重建全部系统配置数据成功')
+          this.reBuildLoading = false
+        }).catch(() => {
+          this.reBuildLoading = false
+        })
+      })
     }
   },
   created () {
@@ -137,4 +187,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .el-table .warning-row {
+    background: oldlace;
+  }
 </style>
